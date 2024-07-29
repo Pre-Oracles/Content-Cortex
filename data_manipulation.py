@@ -2,26 +2,40 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.metrics import accuracy_score
-
+import re 
+stop_words = ["a", "the", "is", "are","but","yet"]
 def collect_historical_data():
     
-    #data_sources = ['dataset_1.csv']
-    #historical_data = []
-    #for source in data_sources:
-        # Load data from each source
-        #data = load_data(source)
-        #historical_data.extend(data)
-    data = pd.read_csv('dataset_1.csv')
-    return data
+    data_sources = ['dataset_1.csv']
+    historical_data = []
+    for source in data_sources:
+        #Load data from each source
+        data = pd.read_csv(source)
+        historical_data.append(data)
+    return historical_data
+def clean_text(text):
+    text = re.sub(r'[^\w\s]','',text)
+    return text
 
 def tokenize(text):
     clean_tokens = text.split(" ")
+    for token in clean_tokens:
+        if(token in stop_words):
+            clean_tokens.remove(token)
     return clean_tokens
+def stem_and_lemmatize(token):
+    #use nltk?
+    return token
+def preprocess_data(data):
+   processed_data = []
+   for text in data:
+       cleaned_text = clean_text(text)
+       tokenized_text = tokenize(cleaned_text)
+       stemmed_and_lemmatized_text = [stem_and_lemmatize(token) for token in tokenized_text]
+       processed_data.append(stemmed_and_lemmatized_text)
+   return processed_data
+
+
 """
 def preprocess_data(data):
     return tokenize(data)
@@ -47,7 +61,7 @@ def create_model():
     # Build the model with the selected architecture, embeddings, loss function, and optimizer
     model = build_model(model_architecture, word_embeddings, loss_function, optimizer)
     return model
- """
+ 
    
 def main():
     historical_data = collect_historical_data()
@@ -70,3 +84,4 @@ def main():
     else:
         print ("This was a BAD comment!")
 main()
+"""
