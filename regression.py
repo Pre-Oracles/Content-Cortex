@@ -1,8 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 import seaborn as sns
 import re
@@ -11,6 +10,8 @@ nltk.download('wordnet')
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
 def preprocess_text(text):
     text = text.lower()
@@ -23,47 +24,21 @@ def preprocess_text(text):
     text = ' '.join(tokens)
     return text
 
-
 df = pd.read_csv("dataset_1.csv")
 vectorizer = TfidfVectorizer()
 df['tweet'] = df['tweet'].apply(preprocess_text)
 X = vectorizer.fit_transform(df['tweet'])
 
+df['hate_speech'] = df['hate_speech'].apply(lambda x: 0 if x == 0 else 1)
 y = df['hate_speech']
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-model = LinearRegression()
+model = LogisticRegression()
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
-mse = mean_squared_error(y_test, y_pred)
-mae = mean_absolute_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
 
-print(f'Mean Squared Error (MSE): {mse}')
-print(f'Mean Absolute Error (MAE): {mae}')
-print(f'R-squared (R²): {r2}')
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
 
-plt.figure(figsize=(8, 6))
-plt.scatter(y_test, y_pred, color='blue')
-plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
-plt.xlabel('Actual Values')
-plt.ylabel('Predicted Values')
-plt.title('Actual vs Predicted Values')
-plt.show()
-
-# Residuals plot
-residuals = y_test - y_pred
-
-plt.figure(figsize=(8, 6))
-sns.histplot(residuals, bins=10, kde=True)
-plt.xlabel('Residuals')
-plt.ylabel('Frequency')
-plt.title('Residuals Distribution')
-plt.show()
-
-plt.figure(figsize=(8, 6))
-plt.scatter(y_pred, residuals, color='purple')
-plt.axhline(y=0, color='red', linestyle='--')
-plt.xlabel('Predicted Values')
-plt.ylabel('Residuals')
-plt.title('Predicted Values vs Residuals')
-plt.show()
+cm = confusion_matrix(y_test, y_pred)
+print(f'Confusion Matrix:\n{cm}')
