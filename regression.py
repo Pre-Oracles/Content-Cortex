@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 import nltk
+import matplotlib.pyplot as plt
+
 nltk.download('wordnet')
 nltk.download('stopwords')
 from nltk.corpus import stopwords
@@ -42,3 +44,25 @@ print(f'Accuracy: {accuracy:.2f}')
 
 cm = confusion_matrix(y_test, y_pred)
 print(f'Confusion Matrix:\n{cm}')
+
+feature_names = vectorizer.get_feature_names_out()
+coefficients = model.coef_[0]
+
+feature_importance = list(zip(feature_names, coefficients))
+sorted_features = sorted(feature_importance, key=lambda x: abs(x[1]), reverse=True)
+
+top_positive = sorted_features[:20]
+top_negative = sorted_features[-20:]
+
+print("Top positive features indicating offensive content:")
+for feature, coef in top_positive:
+    print(f"{feature}: {coef:.4f}")
+
+print("\nTop negative features indicating non-offensive content:")
+for feature, coef in top_negative:
+    print(f"{feature}: {coef:.4f}")
+
+feature_df = pd.DataFrame(sorted_features, columns=['Feature', 'Coefficient'])
+
+feature_df.head(20).plot(kind='barh', x='Feature', y='Coefficient', title='Top Positive Features')
+plt.show()
