@@ -61,8 +61,6 @@ model = SimpleNN(input_dim)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-
-
 for epoch in range(10):
     for batch in dataloader:
         inputs, targets = batch
