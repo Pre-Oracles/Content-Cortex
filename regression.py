@@ -29,15 +29,16 @@ def preprocess_text(text):
     return text
 
 df = pd.read_csv("dataset_1.csv")
+df = df.sample(200,random_state=42)
 #vectorizer = TfidfVectorizer()
-df['tweet'] = df['tweet'].apply(preprocess_text)
+#df['tweet'] = df['tweet'].apply(preprocess_text)
 #X = vectorizer.fit_transform(df['tweet'])
 X = df['tweet']
 
 df['hate_speech'] = df['hate_speech'].apply(lambda x: 0 if x == 0 else 1)
 y = df['hate_speech']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.6, random_state=42)
 
 # Load pre-trained BERT model and tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -71,28 +72,28 @@ print(f'Accuracy: {accuracy:.2f}')
 cm = confusion_matrix(y_test, y_pred)
 print(f'Confusion Matrix:\n{cm}')
 
-feature_names = vectorizer.get_feature_names_out()
-coefficients = model.coef_[0]
+#feature_names = vectorizer.get_feature_names_out()
+#coefficients = model.coef_[0]
 
-feature_importance = list(zip(feature_names, coefficients))
-sorted_features = sorted(feature_importance, key=lambda x: abs(x[1]), reverse=True)
+#feature_importance = list(zip(feature_names, coefficients))
+#sorted_features = sorted(feature_importance, key=lambda x: abs(x[1]), reverse=True)
 
 # Classification Report
 print('Classification Report:')
 print(classification_report(y_test, y_pred))
 
-top_positive = sorted_features[:20]
-top_negative = sorted_features[-20:]
+#top_positive = sorted_features[:20]
+#top_negative = sorted_features[-20:]
 
-print("Top positive features indicating offensive content:")
-for feature, coef in top_positive:
-    print(f"{feature}: {coef:.4f}")
+#print("Top positive features indicating offensive content:")
+#for feature, coef in top_positive:
+ #   print(f"{feature}: {coef:.4f}")
 
-print("\nTop negative features indicating non-offensive content:")
-for feature, coef in top_negative:
-    print(f"{feature}: {coef:.4f}")
+#print("\nTop negative features indicating non-offensive content:")
+#for feature, coef in top_negative:
+    #print(f"{feature}: {coef:.4f}")
 
-feature_df = pd.DataFrame(sorted_features, columns=['Feature', 'Coefficient'])
+#feature_df = pd.DataFrame(sorted_features, columns=['Feature', 'Coefficient'])
 
-feature_df.head(20).plot(kind='barh', x='Feature', y='Coefficient', title='Top Positive Features')
-plt.show()
+#feature_df.head(20).plot(kind='barh', x='Feature', y='Coefficient', title='Top Positive Features')
+#plt.show()
