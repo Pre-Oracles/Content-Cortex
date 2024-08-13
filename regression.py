@@ -42,13 +42,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.6, random_
 
 # Load pre-trained BERT model and tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertModel.from_pretrained('bert-base-uncased')
+b_model = BertModel.from_pretrained('bert-base-uncased')
+
 
 # Function to convert text to BERT embeddings
 def get_bert_embeddings(text):
     inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True, max_length=512)
     with torch.no_grad():
-        outputs = model(**inputs)
+        outputs = b_model(**inputs)
     return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
 # Apply the function to the training and test sets
@@ -81,6 +82,15 @@ print(f'Confusion Matrix:\n{cm}')
 # Classification Report
 print('Classification Report:')
 print(classification_report(y_test, y_pred))
+
+while True:
+    test = input("Lets test a sentence: ")
+    test = preprocess_text(test)
+    test_embeddings = get_bert_embeddings(test)
+    predicted_label = model.predict([test_embeddings])
+    label_names = {0: "Not Offensive", 1: "Offensive"}
+    predicted_class = label_names[predicted_label[0]]
+    print(f"The model predicts the text is: {predicted_class}")
 
 #top_positive = sorted_features[:20]
 #top_negative = sorted_features[-20:]
