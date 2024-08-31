@@ -103,17 +103,18 @@ while True:
     test_sentiment = testBlob.sentiment
 
     test_embeddings = get_bert_embeddings(test)
+    #test_embeddings2 = vectorizer.fit_transform([test])
     predicted_label = model.predict([test_embeddings])
-    predicted_label2 = model2.predict([test_embeddings])
+    #predicted_label2 = model2.predict([test_embeddings2])
     label_names = {0: "Not Offensive", 1: "Offensive"}
     predicted_class = label_names[predicted_label[0]]
-    predicted_class2 = label_names[predicted_label2[0]]
+    #predicted_class2 = label_names[predicted_label2[0]]
 
     
 
 
     print(f"The model predicts the text is: {predicted_class}")
-    print(f"The second model predicts the text is: {predicted_class2}")
+    #print(f"The second model predicts the text is: {predicted_class2}")
     print(f"The model predicts the text's sentiment is: {test_sentiment}")
     if predicted_class=="Not Offensive":
         if test_sentiment[0]>0:
