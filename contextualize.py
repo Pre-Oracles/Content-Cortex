@@ -13,10 +13,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 # Load and preprocess data
 def load_and_preprocess_data(file_path):
-   # Load data
    df = pd.read_csv(file_path)
-  
-   # Check for missing values and handle them
    df.dropna(inplace=True)
   
    # Basic text preprocessing
