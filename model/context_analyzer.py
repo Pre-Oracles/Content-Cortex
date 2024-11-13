@@ -13,7 +13,7 @@ class ContextAnalyzer:
             'profanity': {
                 'mild': ['stupid', 'dumb', 'idiot', 'fool'],
                 'moderate': ['damn', 'hell'],
-                'severe': ['*']  # Placeholder for actual profanity words
+                'severe': ['*']  # Placeholder
             }
         }
 
@@ -51,16 +51,15 @@ class ContextAnalyzer:
         return context_scores
 
     def analyze_phrase_patterns(self, tokens):
-        """
-        Analyze common phrase patterns that might indicate hate speech
-        """
+        #Analyze common phrase patterns that might indicate hate speech
+
         patterns = {
             'negative_associations': 0,
             'stereotyping': 0,
             'threatening': 0
         }
         
-        # Simple sliding window to detect patterns
+        # Sliding window to detect patterns
         for i in range(len(tokens) - 2):
             three_gram = ' '.join(tokens[i:i+3]).lower()
             

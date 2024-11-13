@@ -27,18 +27,15 @@ class SentimentAnalyzer:
         }
 
     def analyze_sentiment(self, tokens):
-        """
-        Analyze sentiment of text using a simple scoring system
-        """
+        #Analyze sentiment of text using a simple scoring system
         score = 0
-        max_score = len(tokens)  # Normalize based on text length
+        max_score = len(tokens)
         current_intensifier = 1.0
 
         for i, token in enumerate(tokens):
             # Check for intensifiers
             if token in self.intensifiers:
                 current_intensifier = self.intensifiers[token]
-                continue
                 
             # Score words
             if token in self.positive_words:
@@ -46,10 +43,7 @@ class SentimentAnalyzer:
             elif token in self.negative_words:
                 score -= (1 * current_intensifier)
                 
-            # Reset intensifier
             current_intensifier = 1.0
-
-        # Normalize score to range [-1, 1]
         normalized_score = score / max_score if max_score > 0 else 0
 
         # Calculate basic metrics

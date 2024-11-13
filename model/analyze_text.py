@@ -27,19 +27,15 @@ class TextAnalyzer:
         return result
 
 def main():
-    # Create analyzer
     analyzer = TextAnalyzer()
-    
-    # Interactive mode
     print("Hate Speech Analyzer")
-    print("Enter 'quit' to exit")
+    print("Enter q to exit")
     print("-" * 50)
     
     while True:
         text = input("\nEnter text to analyze: ")
-        if text.lower() == 'quit':
+        if text == 'q':
             break
-            
         analyzer.analyze_text(text)
 
 if __name__ == "__main__":

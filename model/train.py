@@ -3,21 +3,17 @@ import random
 import pandas as pd
 
 def train_model():
-    # Create detector
     detector = HateSpeechDetector()
     
     # Load and prepare the dataset
     print("Loading dataset...")
     df = pd.read_csv("dataset_1.csv")
     
-    # Convert data to the required format
     # If hate_speech is not 0, label as "hate", otherwise "normal"
     training_data = [
         (row['tweet'], "hate" if row['hate_speech'] != 0 else "normal")
         for _, row in df.iterrows()
     ]
-    
-    # Split into training and validation
     random.shuffle(training_data)
     split_point = int(len(training_data) * 0.8)
     train_set = training_data[:split_point]
@@ -32,7 +28,7 @@ def train_model():
     correct = 0
     total = len(val_set)
     
-    # Detailed metrics
+    # Count
     true_pos = 0
     true_neg = 0
     false_pos = 0

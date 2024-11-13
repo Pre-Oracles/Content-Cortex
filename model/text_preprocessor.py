@@ -19,31 +19,22 @@ class TextPreprocessor:
         }
 
     def clean_text(self, text):
-        """Clean and normalize text"""
-        # Convert to lowercase
         text = text.lower()
-        
-        # Remove special characters and extra whitespace
         cleaned_text = ''
         for char in text:
             if char.isalnum() or char.isspace():
                 cleaned_text += char
-        
-        # Remove extra spaces
         cleaned_text = ' '.join(cleaned_text.split())
         
         return cleaned_text
 
     def tokenize(self, text):
-        """Split text into words"""
         return text.split()
 
     def remove_stop_words(self, tokens):
-        """Remove common stop words"""
         return [token for token in tokens if token not in self.stop_words]
 
     def process_text(self, text):
-        """Complete text preprocessing pipeline"""
         cleaned_text = self.clean_text(text)
         tokens = self.tokenize(cleaned_text)
         filtered_tokens = self.remove_stop_words(tokens)

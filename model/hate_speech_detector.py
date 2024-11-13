@@ -13,12 +13,11 @@ class HateSpeechDetector:
         self.linguistic_analyzer = LinguisticAnalyzer()
         self.context_analyzer = ContextAnalyzer()
         
-        # Training attributes
         self.feature_weights = defaultdict(float)
         self.vocab = set()
         
     def extract_features(self, text):
-        """Extract numerical features from text"""
+        #Extract numerical features from text
         processed = self.preprocessor.process_text(text)
         tokens = processed['tokens']
         
@@ -50,28 +49,25 @@ class HateSpeechDetector:
         return features
 
     def _predict_probability(self, features):
-        """Calculate probability using logistic regression"""
         z = sum(self.feature_weights[feature] * value 
                 for feature, value in features.items())
         return 1 / (1 + math.exp(-z))
 
     def train(self, training_data):
-        """Train the model using labeled examples"""
         print("Starting training...")
-        
-        # Reset weights
         self.feature_weights = defaultdict(float)
-        
-        # Process all training examples
+
+
+        # process the training data
         processed_data = []
         for text, label in training_data:
             features = self.extract_features(text)
             processed_data.append((features, label))
-        
+
+    
         # Train using logistic regression
         learning_rate = 0.01
         epochs = 100
-        
         for epoch in range(epochs):
             total_loss = 0
             
@@ -111,16 +107,15 @@ class HateSpeechDetector:
         }
 
     def save_model(self, filepath):
-        """Save model weights and vocabulary"""
         model_data = {
             'feature_weights': dict(self.feature_weights),
+            
             'vocab': list(self.vocab)
         }
         with open(filepath, 'w') as f:
             json.dump(model_data, f)
 
     def load_model(self, filepath):
-        """Load model weights and vocabulary"""
         with open(filepath, 'r') as f:
             model_data = json.load(f)
         self.feature_weights = defaultdict(float, model_data['feature_weights'])
