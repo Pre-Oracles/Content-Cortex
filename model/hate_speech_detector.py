@@ -67,7 +67,7 @@ class HateSpeechDetector:
     
         # Train using logistic regression
         learning_rate = 0.01
-        epochs = 100
+        epochs = 200
         for epoch in range(epochs):
             total_loss = 0
             

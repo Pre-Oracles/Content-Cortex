@@ -11,7 +11,7 @@ def train_model():
     
     # If hate_speech is not 0, label as "hate", otherwise "normal"
     training_data = [
-        (row['tweet'], "hate" if row['hate_speech'] != 0 else "normal")
+        (row['tweet'], "hate" if row['class'] == 1 else "normal")
         for _, row in df.iterrows()
     ]
     random.shuffle(training_data)
